@@ -37,6 +37,8 @@ func main() {
 	tokenData, err := MsTokenRequest(clientId, clientSecret, *clientCode)
 	if err != nil {
 		fmt.Printf("获取token时发生错误\r\n%s", err.Error())
+		_ = readLine()
+		return
 	}
 	fmt.Printf("获取到token(%v)\r\n", len(tokenData.AccessToken))
 	fmt.Printf("获取到refresh-token(%v)\r\n", len(tokenData.RefreshToken))
