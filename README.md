@@ -1,12 +1,18 @@
 # ms-graph-auth-helper
 
-一个可以快速帮助获取Microsoft Graph API(OneDriver)令牌的小工具
+一个可以快速帮助获取Microsoft Graph API令牌的小工具
+
+并且可以自定义获取权限的类型
 
 ~~在弄网盘API的时候觉得太麻烦了就搞了个这个~~
 
-![ms-auth-run](https://user-images.githubusercontent.com/7535224/147150440-a5074cc7-ce73-4663-b9ee-09a323949666.png)
+![run](https://user-images.githubusercontent.com/7535224/147194336-5c75b46f-bd1d-4b71-8587-a09a0cdf1005.png)
+
+![res](https://user-images.githubusercontent.com/7535224/147194576-7222b3f5-813d-4da1-86ed-69b60f09eb3c.png)
 
 ## 如何使用
+
+**以获取OneDriver相关的API权限为例**
 
 在获取令牌时，请按照以下步骤操作
 

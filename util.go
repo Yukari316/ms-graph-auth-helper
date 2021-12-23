@@ -11,14 +11,15 @@ import (
 	"strings"
 )
 
-func BuildMsAuthorizeUrl(clientId string) string {
+func BuildMsAuthorizeUrl(clientId, permission string) string {
 	u, _ := url.Parse("https://login.microsoftonline.com/common/oauth2/v2.0/authorize")
 	urlQuery := u.Query()
 	urlQuery.Set("client_id", clientId)
 	urlQuery.Set("redirect_uri", "http://localhost:11451/auth")
 	urlQuery.Set("response_type", "code")
+	urlQuery.Set("scope", permission)
 	u.RawQuery = urlQuery.Encode()
-	return fmt.Sprintf("%s&scope=offline_access+Files.Read+Files.Read.All+Files.ReadWrite+Files.ReadWrite.All", u.String())
+	return u.String()
 }
 
 func MsTokenRequest(clientId, clientSecret, clientCode string) (*TokenResp, error) {

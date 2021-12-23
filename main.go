@@ -17,17 +17,28 @@ func main() {
 	fmt.Println("将跳转浏览器授权")
 	fmt.Println("请输入App的应用程序(客户端) ID [Client Id]")
 	clientId := readLine()
-	err := OpenBrowser(BuildMsAuthorizeUrl(clientId))
+	fmt.Println("请输入App的API权限,并使用空格隔开")
+	fmt.Println("如果为空则默认为(offline_access Files.Read Files.Read.All Files.ReadWrite Files.ReadWrite.All)")
+	permission := readLine()
+	if len(permission) == 0 {
+		permission = "offline_access Files.Read Files.Read.All Files.ReadWrite Files.ReadWrite.All"
+		fmt.Printf("输入为空，已使用默认设置")
+		fmt.Println()
+	}
+	err := OpenBrowser(BuildMsAuthorizeUrl(clientId, permission))
 	if err != nil {
 		fmt.Printf("启动浏览器时发生错误\r\n%s", err.Error())
+		readLine()
+		return
 	}
 	fmt.Println()
 	clientCode := <-CodeCh
 	if clientCode != nil {
-		fmt.Printf("获取到code(%v)\r\n", len(*clientCode))
+		fmt.Printf("获取到code(%v)", len(*clientCode))
+		fmt.Println()
 	} else {
 		fmt.Println("获取code失败，请检查client_id和网络设置")
-		_ = readLine()
+		readLine()
 		return
 	}
 	fmt.Println()
@@ -40,8 +51,10 @@ func main() {
 		_ = readLine()
 		return
 	}
-	fmt.Printf("获取到token(%v)\r\n", len(tokenData.AccessToken))
-	fmt.Printf("获取到refresh-token(%v)\r\n", len(tokenData.RefreshToken))
+	fmt.Printf("获取到token(%v)", len(tokenData.AccessToken))
+	fmt.Println()
+	fmt.Printf("获取到refresh-token(%v)", len(tokenData.RefreshToken))
+	fmt.Println()
 	saveData := TokenResult{
 		ClientId: clientId,
 		ClientCode: *clientCode,
@@ -69,12 +82,12 @@ func readLine() (str string) {
 
 func initLog() {
 	fmt.Println("Ciallo～(∠・ω< )⌒☆")
-	fmt.Println("本工具将帮助你获取微软Graph的API的访问令牌，获取到的结果将保存到工具运行的目录下")
+	fmt.Println("本工具将帮助你获取微软Graph的API的访问令牌，获取到的结果将保存到工具运行的目录下（默认将选择OneDriver相关权限）")
 	fmt.Println()
-	fmt.Println("请先保证使用本工具前已经在Microsoft Azure重创建了新的应用，并满足以下条件:")
-	fmt.Println("1.并授予了offline_access Files.Read Files.Read.All Files.ReadWrite Files.ReadWrite.All权限")
-	fmt.Println("2.重定向URL选择了(Web)类型，并设置值为(http://localhost:11451/auth)")
-	fmt.Println("3.在证书和密码选项卡中创建并保存了机密值(Client Secret)")
+	fmt.Println("请先保证使用本工具前已经在Microsoft Azure中创建了新的应用，并满足以下条件:")
+	fmt.Println("1.重定向URL选择了(Web)类型，并设置值为(http://localhost:11451/auth)")
+	fmt.Println("2.在证书和密码选项卡中创建并保存了机密值(Client Secret)")
+	fmt.Println("如果需要使用OneDriver相关API(如各种网盘列表)，请在API权限中授权(offline_access Files.Read Files.Read.All Files.ReadWrite Files.ReadWrite.All)")
 	fmt.Println("请在确认以上条件后按回车继续")
 	_ = readLine()
 }
